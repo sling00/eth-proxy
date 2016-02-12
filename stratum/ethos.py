@@ -10,21 +10,23 @@ def setup ():
 #       print myvar
 #       print myvar2,
 #       myvar3 = myvar[1].split(":", 2)
-#       print myvar3
+
             mainpool = proxypool1[0]
             mainport = proxypool1[1]
+#	    yield mainpool
+#            print mainpool
 #.rstrip('\n')
-            print pool
-            print port
-        elif  re.match("(.*)(?<=proxypool2 )(.*)", line):
+#            print pool
+#            print port
+        elif re.match("(.*)(?<=proxypool2 )(.*)", line):
             proxypool2 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
-        backuppool = proxypool2[0]
-        backupport = proxypool2[1]
+ 	    backuppool = proxypool2[0]
+       	    backupport = proxypool2[1]
 #        print backupport
 #        print backuppool
-        elif  re.match("(.*)(?<=proxywallet )(.*)", line):
-            proxywallet = line.rstrip('\n').split(" ", 2)[1]
-        yield (mainpool, mainport, backuppool, backupport, proxywallet)
+#        elif re.match("(.*)(?<=proxywallet )(.*)", line):
+#            proxywallet = line.rstrip('\n').split(" ", 2)[1]
+	yield (mainpool, mainport, backuppool, backupport, proxywallet)
 #        print proxywallet
 
 setup()

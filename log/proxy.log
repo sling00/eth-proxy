@@ -1,0 +1,22 @@
+2016-02-11 22:08:04,116 WARNING proxy # Ethereum Stratum proxy version: 0.0.4
+2016-02-11 22:08:04,116 WARNING proxy # Trying to connect to Stratum pool at eth-eu.dwarfpool.com:8008
+2016-02-11 22:08:04,116 WARNING proxy # Trying to connect to failover Stratum pool at eth-us.dwarfpool.com:8008
+2016-02-11 22:08:04,257 INFO stats # 1 peers connected, state changed 1 times
+2016-02-11 22:08:04,257 INFO proxy # Connected to Stratum pool at eth-us.dwarfpool.com:8008
+2016-02-11 22:08:04,294 INFO stats # 2 peers connected, state changed 1 times
+2016-02-11 22:08:04,294 INFO proxy # Connected to Stratum pool at eth-eu.dwarfpool.com:8008
+2016-02-11 22:08:04,438 WARNING proxy # -----------------------------------------------------------------------
+2016-02-11 22:08:04,438 WARNING proxy # PROXY IS LISTENING ON ALL IPs ON PORT 8080
+2016-02-11 22:08:04,438 WARNING proxy # -----------------------------------------------------------------------
+2016-02-11 22:08:04,438 WARNING proxy # Wallet: 0x2a65aca4d5fc5b5c859090a6c34d164135398226
+2016-02-11 22:08:04,438 WARNING proxy # Worker ID enabled: True
+2016-02-11 22:08:04,439 WARNING proxy # Email monitoring disabled
+2016-02-11 22:08:04,439 WARNING proxy # Failover enabled: True
+2016-02-11 22:08:04,439 WARNING proxy # -----------------------------------------------------------------------
+2016-02-11 22:08:04,584 INFO proxy # MAIN NEW_JOB
+2016-02-11 22:08:06,029 INFO proxy # Shutting down proxy...
+2016-02-11 22:08:06,029 INFO proxy # Shutting down proxy...
+2016-02-11 22:08:06,030 INFO proxy # Disconnected from Stratum pool at eth-us.dwarfpool.com:8008
+2016-02-11 22:08:06,030 INFO stats # 1 peers connected, state changed 1 times
+2016-02-11 22:08:06,030 INFO proxy # Disconnected from Stratum pool at eth-eu.dwarfpool.com:8008
+2016-02-11 22:08:06,030 INFO stats # 0 peers connected, state changed 1 times
