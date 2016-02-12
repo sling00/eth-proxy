@@ -6,8 +6,10 @@ import os
 import socket
 
 from stratum import settings
-from stratum import ethos
 import stratum.logger
+import re
+import string
+ethosconfig = open("/home/ethos/local", "r")
 log = stratum.logger.get_logger('proxy')
 
 if __name__ == '__main__':
@@ -29,6 +31,25 @@ from mining_libs import jobs
 from mining_libs import version
 from mining_libs.jobs import Job
 
+    for line in ethosconfig:
+        if re.match("(.*)(?<=proxypool1 )(.*)", line):
+            proxypool1 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+#        myvar = line.split(" ", 2)
+#       print line,
+#       print myvar
+#       print myvar2,
+#       myvar3 = myvar[1].split(":", 2)
+
+            mainpool = proxypool1[0]
+            mainport = proxypool1[1]
+
+
+#            print mainpool
+#            print mainport
+        elif re.match("(.*)(?<=proxypool2 )(.*)", line):
+            proxypool2 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+            backuppool = proxypool2[0]
+            backupport = proxypool2[1]
 
 
 def on_shutdown(f):
@@ -81,7 +102,7 @@ def main():
     log.warning("Ethereum Stratum proxy version: %s" % version.VERSION)
 
     # Connect to Stratum pool, main monitoring connection
-    log.warning("Trying to connect to Stratum pool at %s:%d" % (ethos.mainpool, ethos.mainport))
+    log.warning("Trying to connect to Stratum pool at %s:%d" % (mainpool, mainport))
     f = SocketTransportClientFactory(ethos.mainpool, ethos.mainport,
                 debug=settings.DEBUG, proxy=None,
                 event_handler=client_service.ClientMiningService)
