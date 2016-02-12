@@ -13,6 +13,7 @@ def setup ():
 
             mainpool = proxypool1[0]
             mainport = proxypool1[1]
+
 #	    yield mainpool
 #            print mainpool
 #.rstrip('\n')
@@ -20,13 +21,14 @@ def setup ():
 #            print port
         elif re.match("(.*)(?<=proxypool2 )(.*)", line):
             proxypool2 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
- 	    backuppool = proxypool2[0]
+     	    backuppool = proxypool2[0]
        	    backupport = proxypool2[1]
+
 #        print backupport
 #        print backuppool
 #        elif re.match("(.*)(?<=proxywallet )(.*)", line):
 #            proxywallet = line.rstrip('\n').split(" ", 2)[1]
-	yield (mainpool, mainport, backuppool, backupport, proxywallet)
+#	yield (mainpool, mainport, backuppool, backupport, proxywallet)
 #        print proxywallet
-
+        return {'mainpool':mainpool, 'mainport':mainport }
 setup()
