@@ -12,10 +12,13 @@ import string
 ethosconfig = open("/home/ethos/local", "r")
 log = stratum.logger.get_logger('proxy')
 
+for line in ethosconfig:
+    if re.match("(.*)(?<=proxywallet )(.*)", line):
+        proxywallet = line.rstrip('\n').split(" ", 2)[1]
 if __name__ == '__main__':
-    if len(proxywallet)!=42 and len(proxywallet)!=40:
-        log.error("Wrong WALLET!")
-        quit()
+    #if len(proxywallet)!=42 and len(proxywallet)!=40:
+    #    log.error("Wrong WALLET!")
+    #    quit()
     settings.CUSTOM_EMAIL = settings.MONITORING_EMAIL if settings.MONITORING_EMAIL and settings.MONITORING else ""
 
 from twisted.internet import reactor, defer, protocol
@@ -51,9 +54,6 @@ for line in ethosconfig:
         backuppool = proxypool2[0]
         backupport = int(float(proxypool2[1]))
 
-for line in ethosconfig:
-    if re.match("(.*)(?<=proxywallet )(.*)", line):
-        proxywallet = line.rstrip('\n').split(" ", 2)[1]
 
 def on_shutdown(f):
     '''Clean environment properly'''
