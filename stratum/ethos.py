@@ -31,4 +31,11 @@ def setup ():
 #	yield (mainpool, mainport, backuppool, backupport, proxywallet)
 #        print proxywallet
         return {'mainpool':mainpool, 'mainport':mainport }
-setup()
+#setup()
+
+def mainpool ():
+    for line in ethosconfig:
+        if re.match("(.*)(?<=proxypool1 )(.*)", line):
+            mainpool = line.rstrip('\n').split(" ", 2)[1].split(":", 2)[0]
+            return mainpool
+ 
