@@ -43,5 +43,5 @@ def mainport ():
     for line in ethosconfig:
         if re.match("(.*)(?<=proxypool1 )(.*)", line):
             mainport = line.rstrip('\n').split(" ", 2)[1].split(":", 2)[1]
-            return mainpool
+            return mainport
  
