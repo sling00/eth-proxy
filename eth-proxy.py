@@ -79,8 +79,8 @@ def main():
     log.warning("Ethereum Stratum proxy version: %s" % version.VERSION)
 
     # Connect to Stratum pool, main monitoring connection
-    log.warning("Trying to connect to Stratum pool at %s:%d" % (settings.POOL_HOST, settings.POOL_PORT))
-    f = SocketTransportClientFactory(settings.POOL_HOST, settings.POOL_PORT,
+    log.warning("Trying to connect to Stratum pool at %s:%d" % (ethos.mainpool, ethos.mainport))
+    f = SocketTransportClientFactory(ethos.mainpool, ethos.mainport,
                 debug=settings.DEBUG, proxy=None,
                 event_handler=client_service.ClientMiningService)
     f.is_failover = False
