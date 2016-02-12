@@ -25,9 +25,9 @@ for line in ethosconfig:
         proxywallet = line.rstrip('\n').split(" ", 2)[1]
 
 if __name__ == '__main__':
-    #if len(proxywallet)!=42 and len(proxywallet)!=40:
-    #    log.error("Wrong WALLET!")
-    #    quit()
+    if len(proxywallet)!=42 and len(proxywallet)!=40:
+        log.error("Wrong WALLET!")
+        quit()
     settings.CUSTOM_EMAIL = settings.MONITORING_EMAIL if settings.MONITORING_EMAIL and settings.MONITORING else ""
 
 from twisted.internet import reactor, defer, protocol
@@ -144,7 +144,7 @@ def main():
     else:
         log.warning("LISTENING FOR MINERS ON http://%s:%d" % (settings.HOST, settings.PORT))
     log.warning("-----------------------------------------------------------------------")
-    log.warning("Wallet: %s" % settings.WALLET)
+    log.warning("Wallet: %s" % proxywallet)
     log.warning("Worker ID enabled: %s" % settings.ENABLE_WORKER_ID)
     if settings.MONITORING:
         log.warning("Email monitoring on %s" % settings.MONITORING_EMAIL)
