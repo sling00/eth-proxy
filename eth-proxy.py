@@ -6,6 +6,7 @@ import os
 import socket
 
 from stratum import settings
+from stratum import ethos
 import stratum.logger
 log = stratum.logger.get_logger('proxy')
 
