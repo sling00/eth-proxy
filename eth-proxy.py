@@ -95,7 +95,7 @@ def main():
 
     # Connect to Stratum pool, main monitoring connection
     log.warning("Trying to connect to Stratum pool at %s:%d" % (mainpool, mainport))
-    f = SocketTransportClientFactory(ethos.mainpool, ethos.mainport,
+    f = SocketTransportClientFactory(mainpool, mainport,
                 debug=settings.DEBUG, proxy=None,
                 event_handler=client_service.ClientMiningService)
     f.is_failover = False
