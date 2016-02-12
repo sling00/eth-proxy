@@ -22,7 +22,7 @@ def setup ():
         backupport = proxypool2[1]
 #        print backupport
 #        print backuppool
-        elif re.match("(.*)(?<=proxywallet )(.*)", line):
+        elif  re.match("(.*)(?<=proxywallet )(.*)", line):
             proxywallet = line.rstrip('\n').split(" ", 2)[1]
         yield (mainpool, mainport, backuppool, backupport, proxywallet)
 #        print proxywallet
