@@ -13,7 +13,7 @@ ethosconfig = open("/home/ethos/local", "r")
 log = stratum.logger.get_logger('proxy')
 
 if __name__ == '__main__':
-    if len(settings.WALLET)!=42 and len(settings.WALLET)!=40:
+    if len(proxywallet)!=42 and len(proxywallet)!=40:
         log.error("Wrong WALLET!")
         quit()
     settings.CUSTOM_EMAIL = settings.MONITORING_EMAIL if settings.MONITORING_EMAIL and settings.MONITORING else ""
@@ -41,7 +41,7 @@ for line in ethosconfig:
 #       myvar3 = myvar[1].split(":", 2)
 
         mainpool = proxypool1[0]
-        mainport = proxypool1[1]
+        mainport = int(float(proxypool1[1]))
 
 
 #            print mainpool
@@ -49,8 +49,11 @@ for line in ethosconfig:
     elif re.match("(.*)(?<=proxypool2 )(.*)", line):
         proxypool2 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
         backuppool = proxypool2[0]
-        backupport = proxypool2[1]
+        backupport = int(float(proxypool2[1]))
 
+for line in ethosconfig:
+    if re.match("(.*)(?<=proxywallet )(.*)", line):
+        proxywallet = line.rstrip('\n').split(" ", 2)[1]
 
 def on_shutdown(f):
     '''Clean environment properly'''
@@ -83,7 +86,7 @@ def on_connect(f):
     
     # Get first job and user_id
     debug = "_debug" if settings.DEBUG else ""
-    initial_job = (yield f.rpc('eth_submitLogin', [settings.WALLET, settings.CUSTOM_EMAIL], 'Proxy_'+version.VERSION+debug))
+    initial_job = (yield f.rpc('eth_submitLogin', [proxywallet, settings.CUSTOM_EMAIL], 'Proxy_'+version.VERSION+debug))
 
     reactor.callLater(0, ping, f)
 
@@ -110,8 +113,8 @@ def main():
 
     ff = None
     if settings.POOL_FAILOVER_ENABLE:
-        log.warning("Trying to connect to failover Stratum pool at %s:%d" % (settings.POOL_HOST_FAILOVER, settings.POOL_PORT_FAILOVER))
-        ff = SocketTransportClientFactory(settings.POOL_HOST_FAILOVER, settings.POOL_PORT_FAILOVER,
+        log.warning("Trying to connect to failover Stratum pool at %s:%d" % (backuppool, backupport))
+        ff = SocketTransportClientFactory(backuppool, backupport,
                 debug=settings.DEBUG, proxy=None,
                 event_handler=client_service.ClientMiningService)
         ff.is_failover = True
