@@ -13,15 +13,15 @@ ethosconfig = open("/home/ethos/local", "r")
 log = stratum.logger.get_logger('proxy')
 
 for line in ethosconfig:
-    if re.match("(.*)(?<=proxypool1 )(.*)", line):
+    if re.match("(.*)(?<=^proxypool1 )(.*)", line):
         proxypool1 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
         mainpool = proxypool1[0]
         mainport = int(float(proxypool1[1]))
-    elif re.match("(.*)(?<=proxypool2 )(.*)", line):
+    elif re.match("(.*)(?<=^proxypool2 )(.*)", line):
         proxypool2 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
         backuppool = proxypool2[0]
         backupport = int(float(proxypool2[1]))
-    elif re.match("(.*)(?<=proxywallet )(.*)", line):
+    elif re.match("(.*)(?<=^proxywallet )(.*)", line):
         proxywallet = line.rstrip('\n').split(" ", 2)[1]
 
 if __name__ == '__main__':
