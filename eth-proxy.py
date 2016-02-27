@@ -9,7 +9,7 @@ from stratum import settings
 import stratum.logger
 import re
 import string
-ethosconfig = open("/home/ethos/local", "r")
+ethosconfig = open("/home/ethos/local.conf", "r")
 log = stratum.logger.get_logger('proxy')
 
 for line in ethosconfig:
