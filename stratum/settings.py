@@ -36,8 +36,8 @@ def setup():
 
     import config_default
     
-    if os.path.isfile('eth-proxy.conf'):
-        config = open('eth-proxy.conf','r').readlines()
+    if os.path.isfile('/opt/eth-proxy/eth-proxy.conf'):
+        config = open('/opt/eth-proxy/eth-proxy.conf','r').readlines()
     else:
         # Custom config not presented, but we can still use defaults
         config = None
