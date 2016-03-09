@@ -7,11 +7,36 @@ import sys
 import socket
 
 from stratum import settings
+import re
+import string
 import stratum.logger
 log = stratum.logger.get_logger('proxy')
+ethosconfig = open("/home/ethos/local.conf", "r")
+log = stratum.logger.get_logger('proxy')
+
+for line in ethosconfig:
+    if re.match("(.*)(?<=^proxypool1 )(.*)", line):
+        proxypool1 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+        mainpool = proxypool1[0]
+        mainport = int(float(proxypool1[1]))
+    elif re.match("(.*)(?<=^proxypool2 )(.*)", line):
+        proxypool2 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+        backuppool1 = proxypool2[0]
+        backupport1 = int(float(proxypool2[1]))
+    elif re.match("(.*)(?<=^proxypool3 )(.*)", line):
+        proxypool3 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+        backuppool2 = proxypool3[0]
+        backupport2 = int(float(proxypool3[1]))
+    elif re.match("(.*)(?<=^proxypool4 )(.*)", line):
+        proxypool4 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+        backuppool3 = proxypool4[0]
+        backupport3 = int(float(proxypool4[1]))
+
+    elif re.match("(.*)(?<=^proxywallet )(.*)", line):
+        proxywallet = line.rstrip('\n').split(" ", 2)[1]
 
 if __name__ == '__main__':
-    if len(settings.WALLET)!=42 and len(settings.WALLET)!=40:
+    if len(proxywallet)!=42 and len(proxywallet)!=40:
         log.error("Wrong WALLET!")
         sys.exit()
     settings.CUSTOM_EMAIL = settings.MONITORING_EMAIL if settings.MONITORING_EMAIL and settings.MONITORING else ""
@@ -62,7 +87,7 @@ def on_connect(f):
 
     # Get first job and user_id
     debug = "_debug" if settings.DEBUG else ""
-    initial_job = (yield f.rpc('eth_submitLogin', [settings.WALLET, settings.CUSTOM_EMAIL], 'Proxy_'+version.VERSION+debug))
+    initial_job = (yield f.rpc('eth_submitLogin', [proxywallet, settings.CUSTOM_EMAIL], 'Proxy_'+version.VERSION+debug))
 
     reactor.callLater(0, ping, f)
 
@@ -81,8 +106,8 @@ def main():
     log.warning("Ethereum Stratum proxy version: %s" % version.VERSION)
 
     # Connect to Stratum pool, main monitoring connection
-    log.warning("Trying to connect to Stratum pool at %s:%d" % (settings.POOL_HOST, settings.POOL_PORT))
-    f = SocketTransportClientFactory(settings.POOL_HOST, settings.POOL_PORT,
+    log.warning("Trying to connect to Stratum pool at %s:%d" % (mainpool, mainport))
+    f = SocketTransportClientFactory(mainpool, mainport,
                 debug=settings.DEBUG, proxy=None,
                 event_handler=client_service.ClientMiningService)
 
@@ -90,20 +115,20 @@ def main():
     f2 = None
     f3 = None
     if settings.POOL_FAILOVER_ENABLE:
-        log.warning("Trying to connect to failover Stratum pool-1 at %s:%d" % (settings.POOL_HOST_FAILOVER1, settings.POOL_PORT_FAILOVER1))
-        f1 = SocketTransportClientFactory(settings.POOL_HOST_FAILOVER1, settings.POOL_PORT_FAILOVER1,
+        log.warning("Trying to connect to failover Stratum pool-1 at %s:%d" % (backuppool1, backupport1))
+        f1 = SocketTransportClientFactory(backuppool1, backupport1,
                 debug=settings.DEBUG, proxy=None,
                 event_handler=client_service.ClientMiningService)
         f1.is_failover = True
 
-        log.warning("Trying to connect to failover Stratum pool-2 at %s:%d" % (settings.POOL_HOST_FAILOVER2, settings.POOL_PORT_FAILOVER2))
-        f2 = SocketTransportClientFactory(settings.POOL_HOST_FAILOVER2, settings.POOL_PORT_FAILOVER2,
+        log.warning("Trying to connect to failover Stratum pool-2 at %s:%d" % (backuppool2, backupport2))
+        f2 = SocketTransportClientFactory(backuppool2, backupport2,
                 debug=settings.DEBUG, proxy=None,
                 event_handler=client_service.ClientMiningService)
         f2.is_failover = True
 
-        log.warning("Trying to connect to failover Stratum pool-3 at %s:%d" % (settings.POOL_HOST_FAILOVER3, settings.POOL_PORT_FAILOVER3))
-        f3 = SocketTransportClientFactory(settings.POOL_HOST_FAILOVER3, settings.POOL_PORT_FAILOVER3,
+        log.warning("Trying to connect to failover Stratum pool-3 at %s:%d" % (backuppool3, backupport3))
+        f3 = SocketTransportClientFactory(backuppool3, backupport3,
                 debug=settings.DEBUG, proxy=None,
                 event_handler=client_service.ClientMiningService)
         f3.is_failover = True
@@ -156,7 +181,7 @@ def main():
     else:
         log.warning("LISTENING FOR MINERS ON http://%s:%d" % (settings.HOST, settings.PORT))
     log.warning("-----------------------------------------------------------------------")
-    log.warning("Wallet: %s" % settings.WALLET)
+    log.warning("Wallet: %s" % proxywallet)
     log.warning("Worker ID enabled: %s" % settings.ENABLE_WORKER_ID)
     if settings.MONITORING:
         log.warning("Email monitoring on %s" % settings.MONITORING_EMAIL)
