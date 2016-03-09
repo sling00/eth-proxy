@@ -12,7 +12,6 @@ import string
 import stratum.logger
 log = stratum.logger.get_logger('proxy')
 ethosconfig = open("/home/ethos/local.conf", "r")
-log = stratum.logger.get_logger('proxy')
 
 for line in ethosconfig:
     if re.match("(.*)(?<=^proxypool1 )(.*)", line):
