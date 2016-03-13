@@ -12,6 +12,9 @@ import string
 import stratum.logger
 log = stratum.logger.get_logger('proxy')
 ethosconfig = open("/home/ethos/local.conf", "r")
+backuppool1 = None
+backuppool2 = None
+backuppool3 = None
 
 for line in ethosconfig:
     if re.match("(.*)(?<=^proxypool1 )(.*)", line):
@@ -114,23 +117,25 @@ def main():
     f2 = None
     f3 = None
     if settings.POOL_FAILOVER_ENABLE:
-        log.warning("Trying to connect to failover Stratum pool-1 at %s:%d" % (backuppool1, backupport1))
-        f1 = SocketTransportClientFactory(backuppool1, backupport1,
-                debug=settings.DEBUG, proxy=None,
-                event_handler=client_service.ClientMiningService)
-        f1.is_failover = True
-
-        log.warning("Trying to connect to failover Stratum pool-2 at %s:%d" % (backuppool2, backupport2))
-        f2 = SocketTransportClientFactory(backuppool2, backupport2,
-                debug=settings.DEBUG, proxy=None,
-                event_handler=client_service.ClientMiningService)
-        f2.is_failover = True
-
-        log.warning("Trying to connect to failover Stratum pool-3 at %s:%d" % (backuppool3, backupport3))
-        f3 = SocketTransportClientFactory(backuppool3, backupport3,
-                debug=settings.DEBUG, proxy=None,
-                event_handler=client_service.ClientMiningService)
-        f3.is_failover = True
+        if not (backuppool1 is None):
+            log.warning("Trying to connect to failover Stratum pool-1 at %s:%d" % (backuppool1, backupport1))
+            f1 = SocketTransportClientFactory(backuppool1, backupport1,
+                    debug=settings.DEBUG, proxy=None,
+                    event_handler=client_service.ClientMiningService)
+            f1.is_failover = True
+            
+        if not (backuppool2 is None):
+            log.warning("Trying to connect to failover Stratum pool-2 at %s:%d" % (backuppool2, backupport2))
+            f2 = SocketTransportClientFactory(backuppool2, backupport2,
+                    debug=settings.DEBUG, proxy=None,
+                    event_handler=client_service.ClientMiningService)
+            f2.is_failover = True
+        if not (backuppool3 is None):    
+            log.warning("Trying to connect to failover Stratum pool-3 at %s:%d" % (backuppool3, backupport3))
+            f3 = SocketTransportClientFactory(backuppool3, backupport3,
+                    debug=settings.DEBUG, proxy=None,
+                    event_handler=client_service.ClientMiningService)
+            f3.is_failover = True
 
     job_registry = jobs.JobRegistry(f,f1,f2,f3)
     client_service.ClientMiningService.job_registry = job_registry
