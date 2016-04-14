@@ -169,7 +169,7 @@ def main():
         return
 
     if len(proxywallet)!=42 and len(proxywallet)!=40:
-        conn = reactor.listenTCP(settings.PORT, Site(getwork_listener.Root(job_registry)), interface=settings.HOST)
+        conn = reactor.listenTCP(settings.PORT, Site(getwork_listener.Root(job_registry, False)), interface=settings.HOST)
     else: 
         conn = reactor.listenTCP(settings.PORT, Site(getwork_listener.Root(job_registry, settings.ENABLE_WORKER_ID)), interface=settings.HOST)
     try:
@@ -189,10 +189,10 @@ def main():
     log.warning("Wallet: %s" % proxywallet)
     if len(proxywallet)!=42 and len(proxywallet)!=40:
         log.warning("Wallet is not 40/42 Characters in Length, WORKER ID DISABLED")
-        log.warning("OK if using Supernova/Coinotron other non-eth address based pool")
+        log.warning("OK if using non-eth address based pool authentication")
         log.warning("Otherwise - BAD ETH WALLET")
     else:
-    log.warning("Worker ID enabled: %s" % settings.ENABLE_WORKER_ID)
+	log.warning("Worker ID enabled: %s" % settings.ENABLE_WORKER_ID)
     if settings.MONITORING:
         log.warning("Email monitoring on %s" % settings.MONITORING_EMAIL)
     else:
