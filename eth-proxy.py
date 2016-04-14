@@ -165,7 +165,9 @@ def main():
     try:
         yield f.on_connect
     except TransportException:
-        log.warning("First pool server must be online first time during start")
+        log.error("First pool server must be online during proxy startup.  Dying Gracefully.")
+	reactor.stop()
+	reactor.removeAll()
         return
 
     if len(proxywallet)!=42 and len(proxywallet)!=40:
