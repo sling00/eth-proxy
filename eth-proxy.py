@@ -38,9 +38,9 @@ for line in ethosconfig:
         proxywallet = line.rstrip('\n').split(" ", 2)[1]
 
 if __name__ == '__main__':
-    if len(proxywallet)!=42 and len(proxywallet)!=40:
-        log.error("Wrong WALLET!")
-        sys.exit()
+   # if len(proxywallet)!=42 and len(proxywallet)!=40:
+   #     log.error("Wrong WALLET!")
+   #     sys.exit()
     settings.CUSTOM_EMAIL = settings.MONITORING_EMAIL if settings.MONITORING_EMAIL and settings.MONITORING else ""
 
 from twisted.internet import reactor, defer, protocol
@@ -168,9 +168,10 @@ def main():
         log.warning("First pool server must be online first time during start")
         return
 
-
-    conn = reactor.listenTCP(settings.PORT, Site(getwork_listener.Root(job_registry, settings.ENABLE_WORKER_ID)), interface=settings.HOST)
-
+    if len(proxywallet)!=42 and len(proxywallet)!=40:
+        conn = reactor.listenTCP(settings.PORT, Site(getwork_listener.Root(job_registry)), interface=settings.HOST)
+    else: 
+        conn = reactor.listenTCP(settings.PORT, Site(getwork_listener.Root(job_registry, settings.ENABLE_WORKER_ID)), interface=settings.HOST)
     try:
         conn.socket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1) # Enable keepalive packets
         conn.socket.setsockopt(socket.SOL_TCP, socket.TCP_KEEPIDLE, 60) # Seconds before sending keepalive probes
@@ -186,6 +187,11 @@ def main():
         log.warning("LISTENING FOR MINERS ON http://%s:%d" % (settings.HOST, settings.PORT))
     log.warning("-----------------------------------------------------------------------")
     log.warning("Wallet: %s" % proxywallet)
+    if len(proxywallet)!=42 and len(proxywallet)!=40:
+        log.warning("Wallet is not 40/42 Characters in Length, WORKER ID DISABLED")
+        log.warning("OK if using Supernova/Coinotron other non-eth address based pool")
+        log.warning("Otherwise - BAD ETH WALLET")
+    else:
     log.warning("Worker ID enabled: %s" % settings.ENABLE_WORKER_ID)
     if settings.MONITORING:
         log.warning("Email monitoring on %s" % settings.MONITORING_EMAIL)
