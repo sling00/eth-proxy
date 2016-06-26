@@ -9,7 +9,7 @@ Please rename it to config.py and fill correct values.
 DEBUG = False
 
 # Destination for application logs, files rotated once per day.
-LOGDIR = 'log/'
+LOGDIR = '/var/run/eth-proxy-logs/'
 
 # Main application log file.
 LOGFILE = None

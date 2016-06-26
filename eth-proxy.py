@@ -203,7 +203,7 @@ def main():
     log.warning("-----------------------------------------------------------------------")
 
 if __name__ == '__main__':
-    fp = file("eth-proxy.pid", 'w')
+    fp = file("/var/run/eth-proxy.pid", 'w')
     fp.write(str(os.getpid()))
     fp.close()
     main()
