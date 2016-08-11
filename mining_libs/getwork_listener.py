@@ -54,13 +54,7 @@ class Root(Resource):
                     worker_name = str( int(ip_temp[0])*16777216 + int(ip_temp[1])*65536 + int(ip_temp[2])*256 + int(ip_temp[3]) )
             else:
                 worker_name = ''
-
-            if data['method'] == 'eth_submitHashrate':
-                if worker_name and (not self.submitHashrates.has_key(worker_name) or int(time.time())-self.submitHashrates[worker_name]>=60):
-                    self.submitHashrates[worker_name] = int(time.time())
-                    log.info('Hashrate for %s is %s MHs' % (worker_name,int(data['params'][0],16)/1000000.0 ) )
-                    threads.deferToThread(self.job_registry.submit, data['method'], data['params'], worker_name)
-            elif data['method'] == 'eth_submitWork':
+            if data['method'] == 'eth_submitWork':
                 threads.deferToThread(self.job_registry.submit, data['method'], data['params'], worker_name)
             response = self.json_response(data.get('id', 0), True)
         else:
