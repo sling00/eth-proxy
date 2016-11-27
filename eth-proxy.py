@@ -33,10 +33,26 @@ for line in ethosconfig:
         proxypool4 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
         backuppool3 = proxypool4[0]
         backupport3 = int(float(proxypool4[1]))
-
     elif re.match("(.*)(?<=^proxywallet )(.*)", line):
         proxywallet = line.rstrip('\n').split(" ", 2)[1]
-
+    elif re.match("(.*)(?<=^ethminer=proxypool1 )(.*)", line):
+        proxypool1 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+        mainpool = proxypool1[0]
+        mainport = int(float(proxypool1[1]))	
+    elif re.match("(.*)(?<=^ethminer=proxypool2 )(.*)", line):
+        proxypool2 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+        backuppool1 = proxypool2[0]
+        backupport1 = int(float(proxypool2[1]))
+    elif re.match("(.*)(?<=^ethminer=proxypool3 )(.*)", line):
+        proxypool3 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+        backuppool2 = proxypool3[0]
+        backupport2 = int(float(proxypool3[1]))
+    elif re.match("(.*)(?<=^ethminer=proxypool4 )(.*)", line):
+        proxypool4 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
+        backuppool3 = proxypool4[0]
+        backupport3 = int(float(proxypool4[1]))
+    elif re.match("(.*)(?<=^ethminer=proxywallet )(.*)", line):
+        proxywallet = line.rstrip('\n').split(" ", 2)[1]
 if __name__ == '__main__':
    # if len(proxywallet)!=42 and len(proxywallet)!=40:
    #     log.error("Wrong WALLET!")
