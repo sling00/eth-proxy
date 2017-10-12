@@ -5,58 +5,30 @@ import time
 import os
 import sys
 import socket
-
+import subprocess
 from stratum import settings
 import re
 import string
 import stratum.logger
 log = stratum.logger.get_logger('proxy')
-ethosconfig = open("/home/ethos/local.conf", "r")
-backuppool1 = None
-backuppool2 = None
-backuppool3 = None
-
-for line in ethosconfig:
-    if re.match("(.*)(?<=^proxypool1 )(.*)", line):
-        proxypool1 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
-        mainpool = proxypool1[0]
-        mainport = int(float(proxypool1[1]))
-    elif re.match("(.*)(?<=^proxypool2 )(.*)", line):
-        proxypool2 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
-        backuppool1 = proxypool2[0]
-        backupport1 = int(float(proxypool2[1]))
-    elif re.match("(.*)(?<=^proxypool3 )(.*)", line):
-        proxypool3 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
-        backuppool2 = proxypool3[0]
-        backupport2 = int(float(proxypool3[1]))
-    elif re.match("(.*)(?<=^proxypool4 )(.*)", line):
-        proxypool4 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
-        backuppool3 = proxypool4[0]
-        backupport3 = int(float(proxypool4[1]))
-    elif re.match("(.*)(?<=^proxywallet )(.*)", line):
-        proxywallet = line.rstrip('\n').split(" ", 2)[1]
-    elif re.match("(.*)(?<=^ethminer=proxypool1 )(.*)", line):
-        proxypool1 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
-        mainpool = proxypool1[0]
-        mainport = int(float(proxypool1[1]))	
-    elif re.match("(.*)(?<=^ethminer=proxypool2 )(.*)", line):
-        proxypool2 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
-        backuppool1 = proxypool2[0]
-        backupport1 = int(float(proxypool2[1]))
-    elif re.match("(.*)(?<=^ethminer=proxypool3 )(.*)", line):
-        proxypool3 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
-        backuppool2 = proxypool3[0]
-        backupport2 = int(float(proxypool3[1]))
-    elif re.match("(.*)(?<=^ethminer=proxypool4 )(.*)", line):
-        proxypool4 = line.rstrip('\n').split(" ", 2)[1].split(":", 2)
-        backuppool3 = proxypool4[0]
-        backupport3 = int(float(proxypool4[1]))
-    elif re.match("(.*)(?<=^ethminer=proxywallet )(.*)", line):
-        proxywallet = line.rstrip('\n').split(" ", 2)[1]
+proxywallet = subprocess.check_output(['/opt/ethos/sbin/ethos-readconf', 'proxywallet']).strip()
+proxypool1 = subprocess.check_output(['/opt/ethos/sbin/ethos-readconf', 'proxypool1']).strip()
+proxypool2 = subprocess.check_output(['/opt/ethos/sbin/ethos-readconf', 'proxypool2']).strip()
+proxypool3 = subprocess.check_output(['/opt/ethos/sbin/ethos-readconf', 'proxypool3']).strip()
+proxypool4 = subprocess.check_output(['/opt/ethos/sbin/ethos-readconf', 'proxypool4']).strip()
+if len(proxypool1):
+	mainpool, mainport = proxypool1.split(':', 1)
+	mainport = int(float(mainport))
+if len(proxypool2):
+	backuppool1, backupport1 = proxypool2.split(':', 1)
+	backupport1 = int(float(backupport1))
+if len(proxypool3):
+	backuppool2, backupport2 = proxypool3.split(':', 1)
+	backupport2 = int(float(backupport2))
+if len(proxypool4):
+	backuppool3, backupport3 = proxypool4.split(':', 1)
+	backupport3 = int(float(backupport3))
 if __name__ == '__main__':
-   # if len(proxywallet)!=42 and len(proxywallet)!=40:
-   #     log.error("Wrong WALLET!")
-   #     sys.exit()
     settings.CUSTOM_EMAIL = settings.MONITORING_EMAIL if settings.MONITORING_EMAIL and settings.MONITORING else ""
 
 from twisted.internet import reactor, defer, protocol
