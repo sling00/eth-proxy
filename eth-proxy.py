@@ -16,6 +16,9 @@ proxypool1 = subprocess.check_output(['/opt/ethos/sbin/ethos-readconf', 'proxypo
 proxypool2 = subprocess.check_output(['/opt/ethos/sbin/ethos-readconf', 'proxypool2']).strip()
 proxypool3 = subprocess.check_output(['/opt/ethos/sbin/ethos-readconf', 'proxypool3']).strip()
 proxypool4 = subprocess.check_output(['/opt/ethos/sbin/ethos-readconf', 'proxypool4']).strip()
+backuppool1 = None
+backuppool2 = None
+backuppool3 = None
 if len(proxypool1):
 	mainpool, mainport = proxypool1.split(':', 1)
 	mainport = int(float(mainport))
